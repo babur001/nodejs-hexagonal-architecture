@@ -1,0 +1,30 @@
+{
+  "name": "imagels",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "pnpm -r dev",
+    "build": "pnpm -r build",
+    "check-types": "pnpm -r check-types",
+    "dev:native": "pnpm --filter native dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:server": "pnpm --filter server dev",
+    "db:push": "pnpm --filter @imagels/db db:push",
+    "db:studio": "pnpm --filter @imagels/db db:studio",
+    "db:generate": "pnpm --filter @imagels/db db:generate",
+    "db:migrate": "pnpm --filter @imagels/db db:migrate"
+  },
+  "packageManager": "pnpm@10.13.1",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "tsdown": "^0.15.5",
+    "@types/node": "^22.13.11"
+  }
+}
