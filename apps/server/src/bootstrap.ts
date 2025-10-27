@@ -1,9 +1,6 @@
-import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import { container } from "@/core/ioc/container";
-import { InjectionKey } from "@/core/ioc/injection-keys";
-import type { CreateMediaUseCase } from "@/modules/media/application/use-cases/create-media";
+import "dotenv/config";
 
 const app = express();
 
@@ -16,17 +13,12 @@ app.use(
 
 app.use(express.json());
 
-const ordersController = container.get<CreateMediaUseCase>(
-  InjectionKey.CreateMediaUseCase
-);
-
-ordersController.execute();
-
 app.get("/", (_req, res) => {
   res.status(200).send("OK");
 });
 
 const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
