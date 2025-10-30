@@ -1,6 +1,6 @@
 ## Hexagonal architecture implementation with Node.js 🐢
 
-### Tech stack used:
+### 🔨 Tech stack used:
 
 - Node.js
 - Express.js - Not so fast, minimalistic framework
@@ -11,7 +11,7 @@ Project was create for **learning** purposes of hexagonal architecture in pure N
 
 Monorepo project using npm workspaces
 
-### Dependencies
+### 💉 Dependencies
 
 - inversify - for ioc
 - zod - for validation
