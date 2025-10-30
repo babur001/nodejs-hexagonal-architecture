@@ -1,7 +1,7 @@
 import { BaseRepository } from "@/core/base.repository";
 import { permanent_disk_storage_path } from "@/modules/media/application/media-config";
 import { MediaEntity } from "@/modules/media/domain/media-entity";
-import type { IMediaRepository } from "@/modules/media/domain/media.service";
+import type { IMediaRepository } from "@/modules/media/domain/media.repository.interface";
 import { injectable } from "inversify";
 import path from "node:path";
 import fs from "node:fs/promises";
