@@ -1,32 +1,56 @@
 import { BaseEntity } from "@/core/base-entity";
-import type { I_media_props } from "@/modules/media/domain/media-type";
+import type { MediaCreateProps } from "@/modules/media/domain/media-type";
+import path from "node:path";
 
-export class MediaEntity extends BaseEntity implements I_media_props {
-  public static temp_folder = "uploads/temp";
+export class MediaEntity extends BaseEntity {
+  public static temporary_folder = `uploads/temp`;
   public static permanent_folder = `uploads/media`;
 
-  /**
-   * Must be in bytes
-   * 1 KB = 1024 bytes, 1 MB = 1024 * 1024 bytes
-   */
-  readonly file_size: number;
-  readonly file_temp_path: string = MediaEntity.temp_folder;
   readonly file_name: string;
-  readonly mime_type: string;
   readonly file_ext: string;
-  readonly width: number;
-  readonly height: number;
-  readonly permanent_path: string;
+  /** Must be in bytes: 1 KB = 1024 bytes, 1 MB = 1024 * 1024 bytes  */
+  readonly file_size: number;
+  readonly mime_type: string;
 
-  constructor(data: I_media_props) {
-    super({});
-    Object.assign(this, data);
+  /** @description /uploads/media/panda.jpeg */
+  protected readonly _permanent_path: string;
+
+  /** @description /uploads/temp/123456543212345 */
+  protected readonly _temporary_path: string;
+
+  constructor(data: MediaCreateProps) {
+    super();
+    this._permanent_path = data.permanent_path;
+    this._temporary_path = data.temporary_path;
+    this.file_name = data.file_name;
+    this.file_ext = path.extname(data.file_name);
+    this.file_size = data.file_size;
+    this.mime_type = data.mime_type;
   }
 
-  static create(data: I_media_props): MediaEntity {
-    const generated_name = MediaEntity.generate_file_name(data.file_name); // 1627384950_image.png
-    const permanent_path = `${MediaEntity.permanent_folder}/${generated_name}`; // uploads/media/1627384950_image.png
-    return new MediaEntity({ ...data, file_name: generated_name, permanent_path });
+  get permanent_path(): string {
+    return this._permanent_path;
+  }
+
+  get temporary_path(): string {
+    return this._temporary_path;
+  }
+
+  static create(data: MediaCreateProps): MediaEntity {
+    return new MediaEntity({
+      ...data,
+      file_name: MediaEntity.generate_file_name(data.file_name),
+    });
+  }
+
+  static create_from_multer(f: Express.Multer.File): MediaEntity {
+    return this.create({
+      file_name: f.filename,
+      file_size: f.size,
+      mime_type: f.mimetype,
+      permanent_path: "",
+      temporary_path: f.path,
+    });
   }
 
   static generate_file_name(original_name: string): string {

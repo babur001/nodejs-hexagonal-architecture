@@ -25,6 +25,6 @@ export const multer_middleware = multer({
   storage,
   limits: { fileSize: MAX_UPLOAD_SIZE },
   fileFilter: function (req, file, cb) {
-    image_only(file, cb);
+    return image_only(file, cb);
   },
 });

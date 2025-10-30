@@ -1,16 +1,7 @@
 {
   "name": "@imagels/db",
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./src/index.ts"
-    },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./src/*.ts"
-    }
-  },
+  "main": "./src/index.ts",
   "scripts": {
     "build": "tsdown",
     "db:push": "drizzle-kit push",

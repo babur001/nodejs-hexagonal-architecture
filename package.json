@@ -21,9 +21,11 @@
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "dotenv": "^17.2.2",
+    "http-status-codes": "^2.3.0",
     "inversify": "^7.10.3",
     "multer": "^2.0.2",
     "pino": "^10.1.0",
+    "reflect-metadata": "^0.2.2",
     "uuid": "^13.0.0",
     "zod": "^4.1.11"
   },
