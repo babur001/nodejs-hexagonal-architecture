@@ -23,7 +23,7 @@ export class MediaEntity extends BaseEntity {
     this._permanent_path = data.permanent_path;
     this._temporary_path = data.temporary_path;
     this.file_name = data.file_name;
-    this.file_ext = path.extname(data.file_name);
+    this.file_ext = path.extname(data.file_original_name);
     this.file_size = data.file_size;
     this.mime_type = data.mime_type;
   }
@@ -39,7 +39,6 @@ export class MediaEntity extends BaseEntity {
   static create(data: MediaCreateProps): MediaEntity {
     return new MediaEntity({
       ...data,
-      file_name: MediaEntity.generate_file_name(data.file_name),
     });
   }
 
@@ -48,14 +47,22 @@ export class MediaEntity extends BaseEntity {
       file_name: f.filename,
       file_size: f.size,
       mime_type: f.mimetype,
+      file_original_name: f.originalname,
       permanent_path: "",
       temporary_path: f.path,
     });
   }
 
-  static generate_file_name(original_name: string): string {
+  static url(filename: string) {
+    return `${MediaEntity.permanent_folder}/${filename}`;
+  }
+
+  static generate_uniq_file_name(original_name: string, ext: string): string {
     const timestamp = Date.now();
     const sanitized = original_name.replace(/\s+/g, "_").toLowerCase();
-    return `${timestamp}_${sanitized}`;
+
+    console.log(`${timestamp}_${sanitized}${ext}`);
+
+    return `${timestamp}_${sanitized}${ext}`;
   }
 }

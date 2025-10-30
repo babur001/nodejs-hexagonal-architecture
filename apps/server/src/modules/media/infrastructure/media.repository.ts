@@ -2,11 +2,13 @@ import { BaseRepository } from "@/core/base.repository";
 import { permanent_disk_storage_path } from "@/modules/media/application/media-config";
 import { MediaEntity } from "@/modules/media/domain/media-entity";
 import type { IMediaRepository } from "@/modules/media/domain/media.service";
-import { d } from "@imagels/db";
 import { injectable } from "inversify";
 import path from "node:path";
 import fs from "node:fs/promises";
 import { media } from "@/modules/media/infrastructure/media.model";
+import { ensure_decimal } from "@/lib/decimal";
+import { d } from "@/core/db";
+import type { MediaResponseDto } from "@/modules/media/application/dto/media-create.response";
 
 @injectable()
 export class MediaRepository extends BaseRepository implements IMediaRepository {
@@ -14,7 +16,9 @@ export class MediaRepository extends BaseRepository implements IMediaRepository 
 
   public async persist_files(media_entities: MediaEntity[]) {
     const saved_media_entities = await this.save_to_disk(media_entities);
-    return await this.create(saved_media_entities);
+    const saved_to_db = await this.create(saved_media_entities);
+
+    return saved_to_db;
   }
 
   public async archive(ids: MediaEntity["id"][]) {
@@ -34,30 +38,36 @@ export class MediaRepository extends BaseRepository implements IMediaRepository 
   private async save_to_disk(files: MediaEntity[]) {
     return Promise.all(
       files.map(async (file) => {
-        const new_file_name = MediaEntity.generate_file_name(file.file_name);
+        console.log(file);
+
+        const uniq_file_name = MediaEntity.generate_uniq_file_name(
+          file.file_name,
+          file.file_ext
+        );
         const from = file.temporary_path;
-        const to = path.posix.join(permanent_disk_storage_path, new_file_name);
+        const to = path.posix.join(permanent_disk_storage_path, uniq_file_name);
 
         await fs.copyFile(from, to);
         await fs.unlink(from);
 
         return MediaEntity.create({
           ...file,
+          file_original_name: `${file.file_name}${file.file_ext}`,
           temporary_path: from,
-          permanent_path: to,
+          permanent_path: MediaEntity.url(uniq_file_name),
         });
       })
     );
   }
 
-  private async create(entities: MediaEntity[]) {
+  private async create(entities: MediaEntity[]): Promise<MediaResponseDto[]> {
     const new_medias = await this.database
       .insert(this._table)
       .values(
         entities.map((e) => ({
           file_url: e.permanent_path,
           file_name: e.file_name,
-          file_size: e.file_size,
+          file_size: ensure_decimal(e.file_size).toString(),
           mime_type: e.mime_type,
         }))
       )

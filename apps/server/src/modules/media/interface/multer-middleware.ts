@@ -1,12 +1,15 @@
+import { env } from "@/lib/env";
 import {
   allowed_filetypes,
-  MAX_UPLOAD_SIZE,
   temp_disk_storage_path,
 } from "@/modules/media/application/media-config";
 import multer from "multer";
 import path from "node:path";
 
-export const image_only = (file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const check_allowed_file_type = (
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback
+) => {
   const extname = allowed_filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = allowed_filetypes.test(file.mimetype);
 
@@ -23,8 +26,9 @@ const storage = multer.diskStorage({
 
 export const multer_middleware = multer({
   storage,
-  limits: { fileSize: MAX_UPLOAD_SIZE },
+  limits: { fileSize: env.MAX_FILE_SIZE },
   fileFilter: function (req, file, cb) {
-    return image_only(file, cb);
+    if (!file) throw new Error(`No file was provided`);
+    return check_allowed_file_type(file, cb);
   },
 });

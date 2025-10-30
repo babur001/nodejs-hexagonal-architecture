@@ -1,4 +1,3 @@
-import "dotenv/config";
 import "reflect-metadata";
 import cors from "cors";
 import express, { type NextFunction, type Request, type Response } from "express";
@@ -8,6 +7,7 @@ import { InjectionKey } from "@/core/ioc/injection-keys";
 import { MediaController } from "@/modules/media/interface/media.controller";
 import { multer_middleware } from "@/modules/media/interface/multer-middleware";
 import { AsyncResource } from "node:async_hooks";
+import { env } from "@/lib/env";
 
 const app = express();
 
@@ -16,14 +16,16 @@ inject_media_dependencies(container);
 /**
  https://github.com/expressjs/multer/issues/814#issuecomment-1218998366
  */
-// function ensureAsyncContext(middleware: any) {
-//   return (req: Request, res: Response, next: NextFunction) =>
-//     middleware(req, res, AsyncResource.bind(next));
-// }
+function ensureAsyncContext(middleware: any) {
+  return (req: Request, res: Response, next: NextFunction) =>
+    middleware(req, res, AsyncResource.bind(next));
+}
+
+app.use("/uploads/media", express.static("uploads/media"));
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "",
+    origin: env.CORS_ORIGIN || "",
     methods: ["GET", "POST", "OPTIONS"],
   })
 );
@@ -33,11 +35,11 @@ const MediaControllerIoc = container.get<MediaController>(InjectionKey.MediaCont
 
 app.post(
   "/media/create",
-  multer_middleware.array("images", Number(process.env.MAX_FILE_LIMIT)),
+  multer_middleware.array("images", env.MAX_FILE_LIMIT),
   MediaControllerIoc.create.bind(MediaControllerIoc)
 );
 
-const port = process.env.PORT || 3000;
+const port = env.PORT;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

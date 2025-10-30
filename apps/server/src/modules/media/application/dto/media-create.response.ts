@@ -5,6 +5,6 @@ export interface MediaResponseDto extends BaseResponseDto {
   file_name: string;
   mime_type: string;
   file_ext: string;
-  file_size: number;
+  file_size: string;
   folder_id: string | null;
 }
