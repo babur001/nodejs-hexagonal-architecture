@@ -1,14 +1,14 @@
 import { BaseRepository } from "@/core/base.repository";
 import { permanent_disk_storage_path } from "@/modules/media/application/media-config";
-import { MediaEntity } from "@/modules/media/domain/media-entity";
-import type { IMediaRepository } from "@/modules/media/domain/media.repository.interface";
+import { MediaEntity } from "@/modules/media/domain/media.entity";
+import type { MediaResponseDto } from "@/modules/media/application/dto/media-create.response";
+import type { IMediaRepository } from "@/modules/media/application/port/media.repository.port";
 import { injectable } from "inversify";
 import path from "node:path";
 import fs from "node:fs/promises";
 import { media } from "@/modules/media/infrastructure/media.model";
 import { ensure_decimal } from "@/lib/decimal";
-import { d } from "@/core/db";
-import type { MediaResponseDto } from "@/modules/media/application/dto/media-create.response";
+import { d } from "@/infrastructure/database";
 
 @injectable()
 export class MediaRepository extends BaseRepository implements IMediaRepository {

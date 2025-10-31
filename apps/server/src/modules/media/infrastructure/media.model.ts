@@ -1,4 +1,4 @@
-import { cl_uuid, p, timestamps } from "@/core/db";
+import { cl_uuid, p, timestamps } from "@/infrastructure/database";
 
 export const media = p.pgTable("MEDIA", {
   id: cl_uuid(),

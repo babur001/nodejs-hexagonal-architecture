@@ -1,4 +1,4 @@
-import { MediaEntity } from "@/modules/media/domain/media-entity";
+import { MediaEntity } from "@/modules/media/domain/media.entity";
 import path from "node:path";
 
 export const temp_disk_storage_path = path.resolve(

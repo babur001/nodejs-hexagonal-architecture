@@ -4,7 +4,7 @@ import { d } from "./d";
 import { timestamps } from "./timestamps";
 import { cl_uuid } from "./cl_uuid";
 import { schema } from "@/core/db/schema";
-import { env } from "@/lib/env";
+import { env } from "@/infrastructure/config/env";
 
 export const db = drizzle(env.DATABASE_URL, {
   schema: schema,

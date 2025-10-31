@@ -3,7 +3,7 @@ import type { MediaCreateDto } from "@/modules/media/application/dto/media-creat
 import { inject, injectable } from "inversify";
 import type { MediaResponseDto } from "@/modules/media/application/dto/media-create.response";
 import type { MediaRepository } from "@/modules/media/infrastructure/media.repository";
-import { MediaEntity } from "@/modules/media/domain/media-entity";
+import { MediaEntity } from "@/modules/media/domain/media.entity";
 
 @injectable()
 export class CreateMediaUseCase {

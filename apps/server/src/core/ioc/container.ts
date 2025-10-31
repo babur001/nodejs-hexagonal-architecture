@@ -1,5 +1,5 @@
 import { InjectionKey } from "@/core/ioc/injection-keys";
-import { Logger } from "@/core/logger";
+import { Logger } from "@/infrastructure/logger";
 import { Container } from "inversify";
 
 const container = new Container();

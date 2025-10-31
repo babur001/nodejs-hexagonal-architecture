@@ -5,9 +5,9 @@ import { container } from "@/core/ioc/container";
 import { inject_media_dependencies } from "@/modules/media/ioc/inject";
 import { InjectionKey } from "@/core/ioc/injection-keys";
 import { MediaController } from "@/modules/media/interface/media.controller";
-import { multer_middleware } from "@/modules/media/interface/multer-middleware";
+import { multer_middleware } from "@/modules/media/interface/multer.middleware";
 import { AsyncResource } from "node:async_hooks";
-import { env } from "@/lib/env";
+import { env } from "@/infrastructure/config/env";
 
 const app = express();
 

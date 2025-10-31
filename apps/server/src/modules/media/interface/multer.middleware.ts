@@ -1,4 +1,4 @@
-import { env } from "@/lib/env";
+import { env } from "@/infrastructure/config/env";
 import {
   allowed_filetypes,
   temp_disk_storage_path,
